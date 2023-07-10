@@ -196,4 +196,4 @@ select count (job) from emp group by job;  --직함별 사원수
 
 select * from emp;
 
-select deptno, avg(sal) from emp group by deptno having avg(sal) >= 2000;
+select deptno, avg(sal) from emp group by deptno having avg(sal) >= 2000;  
