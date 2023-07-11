@@ -32,6 +32,7 @@ select * from emp where comm not in (300,500,1400);
 -- 7/10
 
 
+
 select * from emp where ename like 'F%'; --F로 시작하는 사람 찾기
 
 select * from emp where ename like '%A%'; --앞뒤 상관없이 A가 들어간 사람
@@ -196,4 +197,80 @@ select count (job) from emp group by job;  --직함별 사원수
 
 select * from emp;
 
-select deptno, avg(sal) from emp group by deptno having avg(sal) >= 2000;  
+select deptno, avg(sal) from emp group by deptno having avg(sal) >= 2000;    -- 그룹별 평균봉급
+
+select deptno, max(sal), min(sal) from emp group by deptno having max(sal) >= 2900;    -- 부서의 최대값과 최소값을 구하되, 최대 급여가 2900 이상인 부서만 출력
+
+
+-- 7/11
+
+
+ select * from emp, dept;    -- join은 기본적으로 카테이션 곱  (emp 기준: 4개로 모든 요소를 곱함)
+ 
+ select * from emp, dept where emp.deptno = dept.deptno;    -- 사원의 정보 출력시, 각 사원이 소속된 부서의 상세정보를 출력하기 위해 두개의 테이블을 조인 (dept정보로 emp와 dept가 같은것만 표시)
+ 
+select ename, dname from emp, dept where emp.deptno = dept.deptno and emp.ename = 'SMITH';     -- smith인 사람의 부서명 출력
+
+select ename, dname from emp e, dept d where e.deptno = d.deptno and e.ename = 'SMITH';    -- 별칭 주기 가능
+
+
+select * from salgrade;   -- 급여 등급
+
+select * from emp, salgrade where sal between losal and hisal order by ename;   -- 각 사원의 급여가 몇등급인지 살펴보는 쿼리문
+
+select * from emp, salgrade,dept                -- + 사원의 부서명
+where dept.deptno = emp.deptno and sal between losal and hisal 
+order by ename;
+
+SELECT E.ENAME||'의 매니저는 '|| M.ENAME||'입니다.' FROM EMP E, EMP M WHERE E.MGR = M.EMPNO;   -- 매니저 구하기
+
+
+-- anci 조인 (등가조인)
+
+select * from emp, dept where emp.deptno = dept.deptno;
+-- = 위 아래 동일
+select * from emp inner join dept on emp.deptno = dept.deptno;
+
+
+-- (outer join)
+
+select * from dept left outer join emp on emp. deptno = dept.deptno;   -- 교집합에다 dept (left)에 들어있는게 포함되어있다
+select * from emp left outer join dept on emp. deptno = dept.deptno;   --
+
+select * from dept, emp where emp.deptno(+) = dept.deptno;  --  (+)는 emp에 dept에 있는것 하나 더 추가
+
+
+-- 유니온
+
+--select a.job, b.deptno
+--from (select job, deptno from emp where sal >= 3000)  a, (select job, deptno from emp where deptno = 10) b;   -- 안해도됨
+
+select job, deptno from emp where sal >= 3000
+union all
+select job, deptno from emp where deptno = 10;    -- 합집합 (union은 중복불가) (union all은 중복 허용)
+
+
+-- 서브쿼리
+
+select deptno from emp where ename = 'SMITH';
+select dname from dept where deptno = 20;
+
+--join 사용
+select dname from emp, dept where emp.deptno = dept.deptno and emp.ename = 'SMITH';
+
+-- 서브쿼리
+select dname from dept           -- 하나의 select 문장 내에 포함된 또 하나의 select 문장이 있는 쿼리문
+where deptno = (select deptno from emp where ename = 'SMITH');           -- 비교 연산자의 오른쪽에 기술, 반드시 괄호 안에 넣어야 한다.
+
+select * from emp;
+
+select * from emp
+where sal > (select avg (sal) from emp);  -- 평균 급여보다 많이 받는 사원
+
+select * from emp
+where sal > (select sal from emp where ename = 'SMITH');    -- 스미스보다 많이 받는 사원 목록
+
+
+---
+
+desc emp;
