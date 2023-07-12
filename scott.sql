@@ -284,12 +284,16 @@ desc emp;
 -- 연봉을 3000이상 받는 사원이 소속된 부서와 동일한 부서에서 근무하는 사원들의 정보를 출력하는 쿼리문
 select ename, sal, deptno
 from emp
-where deptno in (select distinct deptno from emp where sal >= 3000);
+where deptno in (
+select distinct deptno 
+from emp 
+where sal >= 3000
+);
 
 --부서 번호가 30번인 사원들의 급여 중 가장 낮은 값(800)보다 높은 급여를 받는 사원의 이름, 급여를 출력하는 쿼리문
 select ename, sal, deptno
 from emp
-where deptno in (select distinct deptno from emp where sal > 950 and deptno = 30);
+where deptno in (select deptno from emp where sal > 800 and deptno = 30);
 
 select *
 from emp
@@ -338,16 +342,6 @@ select * from emp where sal >1000 and sal >2000 and sal>3000;
 select *
 from emp
 where sal< all(1000,2000,3000); -- 제일 작은값(1000)보다 큰것
-
-
-SELECT *
-FROM
-    emp
-INNER JOIN
-    dept
-    ON deptno = deptno
-    WHERE
-    sal >= 3000;
 
 
 --sql 50제
