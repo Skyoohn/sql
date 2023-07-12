@@ -216,7 +216,7 @@ select ename, dname from emp e, dept d where e.deptno = d.deptno and e.ename = '
 
 select * from salgrade;   -- 급여 등급
 
-select * from emp, salgrade where sal between losal and hisal order by ename;   -- 각 사원의 급여가 몇등급인지 살펴보는 쿼리문
+select * from emp, salgrade where sal between losal and hisal order by ename;   -- 각 사원의 급여가 몇등급인지 살펴보는 쿼리문 // 외워야 함
 
 select * from emp, salgrade,dept                -- + 사원의 부서명
 where dept.deptno = emp.deptno and sal between losal and hisal 
@@ -274,3 +274,279 @@ where sal > (select sal from emp where ename = 'SMITH');    -- 스미스보다 많이 �
 ---
 
 desc emp;
+
+
+
+-- 7/12
+
+--다중행 서브쿼리 - 다중행 연산자와 함께 사용
+
+-- 연봉을 3000이상 받는 사원이 소속된 부서와 동일한 부서에서 근무하는 사원들의 정보를 출력하는 쿼리문
+select ename, sal, deptno
+from emp
+where deptno in (select distinct deptno from emp where sal >= 3000);
+
+--부서 번호가 30번인 사원들의 급여 중 가장 낮은 값(800)보다 높은 급여를 받는 사원의 이름, 급여를 출력하는 쿼리문
+select ename, sal, deptno
+from emp
+where deptno in (select distinct deptno from emp where sal > 950 and deptno = 30);
+
+select *
+from emp
+where deptno = 30 and sal > (select min(sal) from emp);
+
+-- any (or)
+select ename, sal
+from emp
+where sal > any (select sal from emp where deptno = 30);
+
+select *
+from emp
+where sal = any(1000,2000,3000);    -- 만족하는 값이 하나라도 있으면 결과를 리턴, =일때는 in과 동일
+
+select *
+from emp
+where sal > any(1000,2000,3000);    --1000보다 크거나 2000보다 크거나 3000보다 크면, min(1000)과 같음
+
+select *
+from emp
+where sal >= any(1000,2000,3000);    -- >= 1000
+
+select *
+from emp
+where sal < any(1000,2000,3000) order by sal;    -- max(3000)
+
+-- all
+
+select *
+from emp
+where sal > all (select sal from emp where deptno = 30);   -- 30번 소속 사원들 중에서 급여를 가장 많이 받는 사원보다 더 많은 급여를 받는 사람의 이름과 급여를 출력하는 쿼리문
+select ename, sal
+from emp
+where sal > (select max(sal) from emp where deptno = 30);
+
+select *
+from emp
+where sal = all(1000,2000,3000);    -- 모든 값을 만족해야 함, and연산 (sal이 1000,2000,3000)
+
+select *
+from emp
+where sal> all(1000,2000,3000);   -- 제일 큰값(3000)보다 큰것
+select * from emp where sal >1000 and sal >2000 and sal>3000;
+
+
+select *
+from emp
+where sal< all(1000,2000,3000); -- 제일 작은값(1000)보다 큰것
+
+
+SELECT *
+FROM
+    emp
+INNER JOIN
+    dept
+    ON deptno = deptno
+    WHERE
+    sal >= 3000;
+
+
+--sql 50제
+
+select * from dept;
+
+select job,deptno,ename,hiredate
+from emp;
+
+SELECT DISTINCT JOB
+FROM EMP;
+select job
+from emp group by job;
+
+select *
+from emp where sal >=2850;
+
+select ename,deptno
+from emp
+where empno = 7566;
+
+select ename, sal   -- 외워야함
+from emp
+where sal not between 1500 and 2850;
+
+select ename, job, hiredate
+from emp
+where hiredate between '1981/02/20' and '1981/05/01'  order by hiredate asc;
+
+-- DDL (테이블 구조를 정의하는 create table)
+
+create table EMP01(
+    empno number(4),
+    ename varchar2(20),
+    sal number(7,2)
+);   -- table 생성
+
+desc emp01;
+
+create table emp02 as select * from emp;   -- data 전체 복사
+
+desc emp02;
+
+select * from emp02;
+
+create table emp03 as select empno,ename from emp;   -- empno,ename만 복사
+
+select * from emp03;
+
+--ALTER TABLE (기존 테이블의 구조변경)
+
+alter table emp01 add (job varchar2(9)); --내용 추가
+desc emp01;
+alter table emp01 modify (job varchar2(30)); -- 개수 변경
+
+alter table emp01 drop column job;  --삭제
+
+--DROP TABLE
+
+drop table emp01;
+
+--테이블 삭제와 무결성 제약 조건
+
+--Truncate table
+
+select * from emp02;
+
+truncate table emp02;
+
+--테이블명 변경
+rename emp02 to test;
+desc test;
+rename test to emp02;
+desc emp02;
+
+
+--시스템 데이터 딕셔너리
+
+desc user_tables;
+select * from user_tables;
+
+select table_name from user_tables;
+
+desc all_tables;
+select * from all_tables;
+
+
+-- 테이블의 내용을 추가, 수정, 삭제하는 DML
+-- CRUD
+
+create table dept02 as select * from dept;
+
+select * from dept02;
+TRUNCATE table dept02;
+
+--insert
+insert into dept02(deptno,dname,loc) values (10,'ACCOUNTING','NEW YORK');
+insert into dept02(deptno,dname,loc) values (20,'RESEARCH','DALLAS');
+commit;  --영구저장
+
+CREATE TABLE DEPT03 AS SELECT * FROM DEPT WHERE 1=0;   -- 논리적으로 설명 불가 (false 라서 안나온다) 아무것도 보여주지 않고 구조만 복사함
+
+select * from dept03;
+
+drop table emp01;
+create table emp01 as select * from emp;
+
+select * from emp01;
+update emp01 set deptno = 30;   --모든 사원의 부서 번호를 30번으로 수정
+
+update emp01 set sal = sal * 1.1;  - 봉급 10% 인상
+commit;
+
+update emp01 set hiredate = sysdate;  --모든 사원의 입사일을 오늘로 수정
+
+update emp01 set deptno = 40 where deptno = 10;     -- 10번 사원을 40번으로 수정
+
+update emp01 set sal = sal * 1.1 where job = 'MANAGER';   -- 매니저 봉급 10% 인상
+update emp01 set hiredate = sysdate where ename = 'MILLER'; - 밀러만 오늘날짜로
+
+update emp01 set hiredate = sysdate where substr(hiredate, 1, 2) = '82';
+update emp01 set hiredate = sysdate where hiredate between '82/01/01' and '82/12/31'; -- 82년 입사자 오늘날짜로
+
+update emp01 set deptno=20, job='MANAGER' where ename = 'SMITH';
+
+update emp01 set hiredate = sysdate, sal = 50, comm = 4000 where ename = 'SMITH';  -- 스미스 sal 50, comm 4000, 입사일 오늘
+
+DROP TABLE DEPT01;
+CREATE TABLE DEPT01 AS SELECT * FROM DEPT;
+select * from dept01;
+
+update dept01 set  loc = (select loc from dept01 where deptno=40) where deptno = 20;  -- 20번 지역명을 40번으로
+
+--delete
+
+delete from dept01;
+commit;
+rollback;
+
+delete from dept01 where deptno = 30;   -- 30번 부서 삭제후 부서 테이블 확인
+
+select * from emp01;
+select * from dept01;
+
+DELETE FROM EMP01 
+WHERE DEPTNO = (SELECT DEPTNO FROM DEPT WHERE DNAME='SALES');   -- 서브 쿼리문으로 부서명이 SALES인 부서의 번호부터 알아낸 뒤 SALES 부서 소속의 사원을 삭제하는 쿼리문
+
+
+--- 트랜젝션 관리
+
+DROP TABLE DEPT01;
+CREATE TABLE DEPT01 AS SELECT * FROM DEPT;
+select * from dept01;
+
+delete from dept01;
+
+rollback;
+
+delete from dept01 where deptno = 20;
+commit;
+
+-- not null
+
+--null 못들어가게 함
+DROP TABLE EMP02;
+CREATE TABLE EMP02(
+    EMPNO NUMBER(4) NOT NULL, 
+    ENAME VARCHAR2(10) NOT NULL, 
+    JOB VARCHAR2(9), 
+    DEPTNO NUMBER(2)
+);
+
+desc emp02;
+INSERT INTO EMP02 (EMPNO, ENAME, JOB, DEPTNO) VALUES (1, '홍길동','SALESMAN', 20);
+INSERT INTO EMP02 (EMPNO, ENAME, JOB, DEPTNO) VALUES (1, '홍길동',null, null);
+INSERT INTO EMP02 (EMPNO, ENAME) values (1, '홍길동');
+
+select * from emp02;
+
+
+-- unique는 중복 허용X
+DROP TABLE EMP03;
+CREATE TABLE EMP03(
+    EMPNO NUMBER(4) primary key,   -- unique not null 합친것
+    ENAME VARCHAR2(10) NOT NULL, 
+    JOB VARCHAR2(9), 
+    DEPTNO NUMBER(2)
+);
+
+INSERT INTO EMP03 (EMPNO, ENAME, JOB, DEPTNO) VALUES (1, '홍길동',null, null);
+INSERT INTO EMP03 (EMPNO, ENAME, JOB, DEPTNO) VALUES (2, '홍길동',null, null);
+INSERT INTO EMP03 (EMPNO, ENAME, JOB, DEPTNO) VALUES (2, '홍길손',null, null);
+INSERT INTO EMP03 (EMPNO, ENAME, JOB, DEPTNO) VALUES (null, '홍길손',null, null);
+
+select * from emp03;
+
+DROP TABLE EMP05;
+CREATE TABLE EMP05(
+EMPNO NUMBER(4) CONSTRAINT EMP05_EMPNO_PK PRIMARY KEY, 
+ENAMR VARCHAR2(10) CONSTRAINT EMP05_ENAME_NN NOT NULL, 
+JOB VARCHAR(9), DEPTNO NUMBER(2));
+
