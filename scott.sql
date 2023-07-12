@@ -13,6 +13,7 @@ select * from emp where deptno = 10 and JOB = 'MANAGER'; --조건 2개
 select * from emp where DEPTNO = 10 or job = 'MANAGER';
 select * from emp where not deptno = 10; --10이 아닌
 
+
 select * from emp where sal >= 2000 and sal <= 3000;
 select * from emp where sal between 2000 and 3000; -- 많이 쓰는 스타일
 
@@ -30,7 +31,6 @@ select * from emp where comm not in (300,500,1400);
 
 
 -- 7/10
-
 
 
 select * from emp where ename like 'F%'; --F로 시작하는 사람 찾기
