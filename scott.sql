@@ -544,3 +544,147 @@ EMPNO NUMBER(4) CONSTRAINT EMP05_EMPNO_PK PRIMARY KEY,
 ENAMR VARCHAR2(10) CONSTRAINT EMP05_ENAME_NN NOT NULL, 
 JOB VARCHAR(9), DEPTNO NUMBER(2));
 
+
+DROP TABLE EMP06;
+
+
+--7/13
+
+--foreign
+
+CREATE TABLE EMP06(
+EMPNO NUMBER(4) CONSTRAINT EMP06_EMPNO_PK PRIMARY KEY,     -- 에러가 뜰때 EMP06_EMPNO_PK 가 뜬다 (없어도 됨)
+ENAME VARCHAR2(10) CONSTRAINT EMP06_ENAME_NN NOT NULL, 
+JOB VARCHAR(9), 
+DEPTNO NUMBER(2) CONSTRAINT EMP06_DEPTNO_FK REFERENCES DEPT(DEPTNO));   -- REFERENCES가 foreign키 만듦
+
+select * from emp06;
+
+insert into emp06 values(7499,'ALLEN','SALESMAN',30);
+
+insert into emp06 values(7800,'홍길동','SALESMAN',50);   -- 부모에 50번이 없어서 못만든다
+
+
+--check (잘안씀)
+
+create table student(
+    id number(4) primary key,
+    score number(3) not null,    
+    constraint SCORE_CHECK check (score >= 0)
+    );
+    
+insert into student values(1,100);
+insert into student values(2,-20);
+      
+select * from student;
+
+--시퀀스
+
+drop sequence EMP_SEQ;
+CREATE SEQUENCE EMP_SEQ START WITH 1 INCREMENT BY 1 MAXVALUE 100000;          -- start with 1가 1개씩
+
+DROP TABLE EMP01;
+
+CREATE TABLE EMP01(
+    EMPNO NUMBER(4) PRIMARY KEY, 
+    ENAME VARCHAR(10), 
+    HIREDATE DATE
+);
+
+insert into emp01 values(
+EMP_SEQ.NEXTVAL,'홍길동',SYSDATE);    
+
+select * from emp01;
+
+select EMP_SEQ.currval from dual;
+select EMP_SEQ.nextval from dual;             
+
+alter sequence EMP_SEQ increment by 2;         -- 2씩 증가 하도록 변경
+
+--50제
+
+select * from emp;
+
+--8> 10번 및 30번 부서에 속하는 모든 사원의 이름과 부서 번호를 출력하되, 이름을 알파벳순으로 정렬하여 출력하라.
+select deptno, ename 
+from emp 
+WHERE DEPTNO IN(10,30)
+ORDER BY ENAME;
+
+-- 9> 10번 및 30번 부서에 속하는 모든 사원 중 급여가 1500을 넘는 사원의 이름 및 급여를 출력하라.
+-- (단 컬럼명을 각각 employee 및 Monthly Salary로 지정하시오)
+
+--띄어쓰기 있으면 " "
+SELECT ENAME AS "Employee", SAL AS "Monthly Salary"
+FROM EMP
+WHERE DEPTNO IN(10,30) AND SAL>1500;
+
+select * from emp;
+
+--10> 관리자가 없는 모든 사원의 이름 및 직위를 출력하라.
+select ename, job 
+from emp 
+where mgr is null;
+
+--11> 커미션을 받는 모든 사원의 이름, 급여 및 커미션을 출력하되, 급여를 기준으로 내림차순으로 정렬하여 출력하라.
+SELECT ENAME, SAL, COMM
+FROM EMP
+WHERE COMM IS NOT NULL
+ORDER BY SAL DESC;
+
+--12> 이름의 세 번째 문자가 A인 모든 사원의 이름을 출력하라.
+select * from emp where ename like '__A%';
+
+--13> 이름에 L이 두 번 들어가며 부서 30에 속해있는 사원의 이름을 출력하라.
+select ename from emp where ename like '%L%L%' and deptno = 30;
+
+--14> 직업이 Clerk 또는 Analyst 이면서 급여가 1000,3000,5000 이 아닌 모든 사원의 이름, 직업 및 급여를 출력하라.
+select job, ename, sal
+from emp 
+where job in ('CLERK', 'ANALYST') and sal not in(1000,3000,5000);
+
+--15> 사원번호, 이름, 급여 그리고 15%인상된 급여를 정수로 표시하되 컬럼명을 New Salary로 지정하여 출력하라.
+SELECT EMPNO, ENAME, SAL,
+ROUND(SAL+(SAL*0.15),0) AS "New Salary"
+FROM EMP;
+
+--16> 15번 문제와 동일한 데이타에서 급여 인상분(새 급여에서 이전 급여를 뺀 값)을 추가해서 출력하라.(컬럼명은 Increase로 하라).
+SELECT EMPNO, ENAME, SAL, ROUND(SAL+(SAL*0.15) ) AS "New Salary",
+(ROUND(SAL+(SAL*0.15)))-SAL AS "Increase"
+FROM EMP;
+
+--18> 모든 사원의 이름(첫 글자는 대문자로, 나머지 글자는 소문자로 표시) 및 이름 길이를 표시하는 쿼리를 작성하고 컬럼 별칭은 적당히 넣어서 출력하라.
+SELECT UPPER(SUBSTR(ENAME,1,1)) || LOWER(SUBSTR(ENAME,2,12)) AS "NAME",    -- ||는 그냥 +
+LENGTH(ENAME) AS "LENENAME"
+FROM EMP;
+
+select initcap (ename) as "ename",
+length (ename) as "lenename"
+from emp;
+
+--19> 사원의 이름과 커미션을 출력하되, 커미션이 책정되지 않은 사원의 커미션은 'no commission'으로 출력하라.
+SELECT ENAME, NVL(TO_CHAR(COMM),'no commission')
+FROM EMP;
+
+--20> 모든 사원의 이름,부서번호,부서이름을 표시하는 질의를 작성하라.(DECODE)
+SELECT empno, deptno , DECODE(deptno,10,'ACCOUNTING' ,
+20,'RESEARCH',
+30,'SALES',
+40,'OPERATIONS') AS "dname"
+FROM EMP;
+
+--먼저 이거부터 쓰고 생각
+select *
+from emp e, dept d
+where e.deptno=d.deptno; 
+
+--21> 30번 부서에 속한 사원의 이름과 부서번호 그리고 부서이름을 출력하라.
+SELECT E.ENAME, E.DEPTNO, D.DNAME
+FROM EMP E, DEPT D
+WHERE E.DEPTNO=D.DEPTNO AND E.DEPTNO=30;
+
+--22> 30번 부서에 속한 사원들의 모든 직업과 부서위치를 출력하라.
+SELECT DISTINCT E.JOB, D.LOC
+FROM EMP E, DEPT D
+WHERE E.DEPTNO=D.DEPTNO AND D.DEPTNO=30;
+
