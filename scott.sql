@@ -134,7 +134,7 @@ select to_char(sysdate, 'yyyy/mm/dd, hh24:mi:ss') from dual;
 
 desc emp; 
 
-select ename, sal, to_char(sal, 'l99,999') from emp; -- 각 지역별 통화기호를 앞에 붙이고 천단위마다 콤마를 붙여서 출력
+select ename, sal, to_char(sal, 'l99,999') as 통화 from emp; -- 각 지역별 통화기호를 앞에 붙이고 천단위마다 콤마를 붙여서 출력
 
 select ename, hiredate from emp where hiredate = '1981-02-20';      -- 날짜형은 ' ' 로 변환      to_char('1981/02/20') 도 가능 (숫자형을 다이렉트로 집어넣으면 안된다는게 중요)
 select ename, hiredate from emp where hiredate = to_date(19810220,'yyyymmdd');    -- 위와 동일한
@@ -291,9 +291,9 @@ where sal >= 3000
 );
 
 --부서 번호가 30번인 사원들의 급여 중 가장 낮은 값(800)보다 높은 급여를 받는 사원의 이름, 급여를 출력하는 쿼리문
-select ename, sal, deptno
-from emp
-where deptno in (select deptno from emp where sal > 800 and deptno = 30);
+--select ename, sal, deptno
+--from emp
+--where deptno in (select deptno from emp where sal > 800 and deptno = 30);
 
 select *
 from emp
@@ -687,4 +687,53 @@ WHERE E.DEPTNO=D.DEPTNO AND E.DEPTNO=30;
 SELECT DISTINCT E.JOB, D.LOC
 FROM EMP E, DEPT D
 WHERE E.DEPTNO=D.DEPTNO AND D.DEPTNO=30;
+
+--23> 커미션이 책정되어 있는 모든 사원의 이름, 부서이름 및 위치를 출력하라.
+select e.ename, e.deptno, d.loc
+from emp e, dept d
+where e.deptno=d.deptno and e.comm is not null;
+
+--24> 이름에 A가 들어가는 모든 사원의 이름과 부서 이름을 출력하라.
+SELECT E.ENAME, D.DNAME
+FROM EMP E, DEPT D
+WHERE E.DEPTNO=D.DEPTNO AND E.ENAME LIKE '%A%';
+
+--25> Dallas에서 근무하는 모든 사원의 이름, 직업, 부서번호 및 부서이름을 출력하라.
+select e.ename, e.job, e.deptno, d.dname
+from emp e, dept d
+where e.deptno=d.deptno and d.loc = 'DALLAS';
+
+select * from emp;
+
+--26> 사원 이름 및 사원번호, 해당 관리자 이름 및 관리자 번호를 출력하되, 각 칼럼명을 EMPLOYEE,EMP#,MGR#,MANAGER으로 표시하여 출력하라.
+select e.ename as employee, e.empno as emp#, e.mgr as mgr#, m.ename as manager
+from emp e, emp m    -- self join
+where E.MGR = M.EMPNO;
+
+--27>모든 사원의 이름,직업,부서이름,급여 및 등급을 출력하라.
+SELECT E.ENAME, E.JOB, D.DNAME, E.SAL, S.GRADE
+FROM EMP E, DEPT D, SALGRADE S
+WHERE E.DEPTNO=D.DEPTNO
+AND E.SAL BETWEEN S.LOSAL AND S.HISAL;
+
+
+CREATE TABLE users (
+	"ID"	varchar2(50)		NULL,
+	"email"	varchar(100)		NOT NULL
+);
+
+CREATE TABLE "users" (
+	"ID"	varchar2(50)		NULL,
+	"email"	varchar(100)		NOT NULL,
+	"Key"	number		NOT NULL
+);
+
+CREATE TABLE "images" (
+	"Key"	number		NOT NULL,
+	"Field"	varchar2(200)		NOT NULL
+);
+
+ALTER TABLE "images" ADD CONSTRAINT "PK_IMAGES" PRIMARY KEY (
+	"Key"
+);
 
