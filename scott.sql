@@ -738,3 +738,33 @@ ALTER TABLE "images" ADD CONSTRAINT "PK_IMAGES" PRIMARY KEY (
 );
 
 
+
+--7/17
+
+--rownum (오라클의 페이징)
+--select 해온 데이터에 일련번호 붙이기 = 1번부터 붙이기
+
+select rownum, emp.*  from emp where rownum  <= 10;
+
+--select rownum, emp.*  from emp where rownum between 5 and 10;  -- 가 안되는 이유는 rownum이 1부터 시작되기 때문
+
+select *
+from (select rownum as rn, emp.* from emp)
+where rn between 5 and 10; -- 1을 먼저 뽑아야 하기 때문
+
+--28> smith보다 늦게 입사한 사원의 이름 및 입사일을 출력하라. 
+
+select ename, hiredate
+from emp
+where hiredate > (select hiredate from emp where ename = 'SMITH');  --늦게 입사한 사원은 숫자가 더 크다
+
+--29> 자신의 관리자보다 먼저 입사한 모든 사원의 이름, 입사일,
+--관리자의 이름, 관리자의 입사일을 출력하되 각각 컬럼명을
+--Employee,EmpHiredate, Manager,MgrHiredate로 표시하여 출력하라.
+
+SELECT E.ENAME AS "Employee", E.HIREDATE AS "EmpHIredate",
+M.ENAME AS "Manager",
+M.HIREDATE AS "MgrHiredate"
+FROM EMP E, EMP M
+WHERE E.MGR=M.EMPNO AND E.HIREDATE<M.HIREDATE;
+
