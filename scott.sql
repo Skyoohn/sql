@@ -768,3 +768,41 @@ M.HIREDATE AS "MgrHiredate"
 FROM EMP E, EMP M
 WHERE E.MGR=M.EMPNO AND E.HIREDATE<M.HIREDATE;
 
+--7/18
+
+--30> 모든 사원의 급여 최고액, 최저액, 총액 및 평균액을 출력하되
+--각 칼럼명을 maximum, minimum, sum, average 로 지정하여 출력하라.
+select max(sal) maximum, min(sal) minimum, sum(sal) sum, avg(sal) average
+from emp;
+
+--31> 각 직업별로 급여 최저액, 최고액, 총액, 및 평균액을 출력하라. (group by와 select는 같이 있어야 한다)
+select job, max(sal) maximum, min(sal) minimum, sum(sal) sum, avg(sal) average
+from emp 
+group by job;
+
+--32> 직업이 동일한 사람 수를 직업과 같이 출력하라.
+select job, count(job)
+from emp
+group by job;
+
+--33>관리자의 수를 출력하되, 관리자 번호가 중복되지 않게하라. 그리고,
+--칼럼명을 number of manager로 지정하여 출력하라.
+select count(distinct(mgr)) as "number of manager"
+from emp;
+
+select * from emp;
+
+--34> 최고 급여와 최저 급여의 차액을 출력하라.
+select max(sal) - min(sal)
+from emp;
+
+--35> 관리자 번호 및 해당 관리자에 속한 사원들의 최저 급여를 출력하라.
+--단, 관리자가 없는 사원 및 최저 급여가 1000 미만인 그룹은 제외시키고 급여를 기준으로
+--출력 결과를 내림차순으로 정렬하라.
+
+select mgr, min(sal)
+from emp
+where mgr is not null 
+group by mgr 
+having min(sal) >= 1000 order by min(sal);
+
