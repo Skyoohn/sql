@@ -123,8 +123,7 @@ select ename, hiredate, add_months(hiredate, 4) from emp;  -- 입사 날짜에서 4개�
 select sysdate, next_day(sysdate,'금요일') from dual;    -- 오늘 기준 가장 가까운 다음 수요일 (OS 언어 기준으로 문자 인식)
 
 select hiredate, last_day(hiredate) from emp;    -- 입사한 달의 마지막날
-
-
+ 
 select sysdate, to_char (sysdate, 'yyyy-mm-dd') from dual;  -- 현재 날짜를 문자형으로 변환하여 출력
 
 select hiredate, to_char(hiredate,'yyyy/mm/dd day') as 입사일 from emp;   -- 입사일 출력, 요일과 함께 (day는 요일)
@@ -790,7 +789,7 @@ group by job;
 select count(distinct(mgr)) as "number of manager"
 from emp;
 
-select * from emp;
+
 
 --34> 최고 급여와 최저 급여의 차액을 출력하라.
 select max(sal) - min(sal)
@@ -806,3 +805,45 @@ where mgr is not null
 group by mgr 
 having min(sal) >= 1000 order by min(sal);
 
+--7/19
+
+--36> 부서별로 부서이름, 부서위치, 사원 수 및 평균 급여를 출력하라.
+--그리고 각각의 컬럼명을 부서명,위치,사원의 수,평균급여로 표시하라.
+select e.deptno "부서명",d.dname "부서이름",count(e.empno) "사원의 수",avg(sal) "평균급여",d.loc "위치"
+from emp e, dept d
+where E.DEPTNO=D.DEPTNO
+group by e.deptno, d.dname, d.loc;
+
+
+--37> smith와 동일한 부서에 속한 사원의 이름 및 입사일을 출력하라.
+select ename, hiredate
+from emp
+where deptno in(select deptno from emp where ename = 'SMITH')
+and ename != 'SMITH';
+
+
+--38> 자신의 급여가 평균 급여보다 많은 모든 사원의 사원번호, 이름, 급여를
+--표시하는 질의를 작성하고 급여를 기준으로 결과를 내림 차순으로 정렬하라.
+select empno, ename, sal
+from emp
+where sal > (select avg(sal) from emp)
+order by sal desc;
+
+select empno, ename, sal, (select avg(sal) from emp) as "평균" 
+from emp 
+where sal > (select avg(sal) from emp) order by sal desc;
+
+SELECT e.EMPNO, e.ENAME, e.SAL, d.avgsal as "평균"
+FROM EMP e, (SELECT AVG(SAL) as avgsal FROM EMP) d
+WHERE e.SAL >(SELECT AVG(SAL)FROM EMP)
+ORDER BY e.SAL DESC;
+
+select * from emp;
+select * from dept;
+
+--39> 이름에 T가 들어가는 사원이 속한 부서에서 근무하는 모든 사원의 사원번호 및 이름을 출력하라.
+SELECT EMPNO, ENAME
+FROM EMP
+WHERE DEPTNO IN(SELECT DEPTNO
+FROM EMP
+WHERE ENAME LIKE '%T%')
