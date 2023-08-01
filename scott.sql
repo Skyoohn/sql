@@ -1,6 +1,5 @@
 desc mvc_board;
 
-
 select * from mvc_board order by bgroup desc,bstep asc;
 
 create table mvc_board(
@@ -26,7 +25,6 @@ values (mvc_board_seq.nextval, 'abcd', 'is title', 'is content', 0,
 mvc_board_seq.currval, 0, 0);
 
 select  *  from mvc_board;
-
 
 
 
