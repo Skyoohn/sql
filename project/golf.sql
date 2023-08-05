@@ -110,8 +110,134 @@ INSERT INTO TBL_CLASS_202201 VALUES('202203','20001','부산분원',150000,'300');
 INSERT INTO TBL_CLASS_202201 VALUES('202203','20002','대구분원',200000,'400');
 
 
+SELECT * FROM TBL_CLASS_202201;
+
+SELECT * FROM TBL_TEACHER_202201;
+
+SELECT * FROM TBL_MEMBER_202201;
+
+SELECT TEACHER_CODE AS 강사코드,CLASS_NAME AS 강의명,TEACHER_NAME AS 강사명,CLASS_PRICE AS 총매출
+FROM TBL_TEACHER_202201;
+
+
+SELECT * FROM TBL_TEACHER_202201,TBL_CLASS_202201
+WHERE TBL_TEACHER_202201.TEACHER_CODE = TBL_CLASS_202201.TEACHER_CODE;
+
+
+select distinct a.TEACHER_CODE, a.TEACHER_NAME, a.TEACHER_NAME, d.TUITION
+from TBL_TEACHER_202201 a,TBL_CLASS_202201 d
+where a.TEACHER_CODE=d.TEACHER_CODE; 
+
+SELECT *
+from TBL_TEACHER_202201 a,TBL_CLASS_202201 d
+where a.TEACHER_CODE=d.TEACHER_CODE; 
+
+
+select a.TEACHER_CODE AS 강사코드, a.CLASS_NAME AS 강의명, a.TEACHER_NAME AS 강사명, SUM(d.TUITION) AS 총매출
+from TBL_TEACHER_202201 a,TBL_CLASS_202201 d
+where a.TEACHER_CODE=d.TEACHER_CODE
+group by a.TEACHER_CODE, a.CLASS_NAME, a.TEACHER_NAME, d.TUITION
+order by a.TEACHER_CODE;
+
+
+
+-- 투표
+
+
 select * from tbl_vote_202005;
 
 insert into tbl_vote_202005 values('99010110001','김유권','1','0930','제1투표장','N');
 
-insert into tbl_vote_202005 values('89010120002','이유권','2','0930','제1투표장','N'),('69010110003','박유권','3','0930','제1투표장','Y'),('59010120004','홍유권','4','0930','제1투표장','Y'),('79010110005','조유권','5','0930','제1투표장','Y'),('890101120006','최유권','1','0930','제1투표장','Y'),('59010110007','지유권','1','0930','제1투표장','Y'),('49010120008','장유권','3','0930','제1투표장','Y'),('79010110009','정유권','3','0930','제1투표장','Y'),('89010120010','강유권','4','0930','제1투표장','Y'),('99010110011','신유권','5','0930','제1투표장','Y'),('79010120012','오유권','1','1330','제1투표장','Y'),('69010110013','현유권','4','1330','제2투표장','Y'),(
+insert into tbl_vote_202005 values('89010120002','이유권','2','0930','제1투표장','N');
+
+
+insert into tbl_vote_202005 values('69010110003','박유권','3','0930','제1투표장','Y');
+
+
+
+insert into tbl_vote_202005 values('59010120004','홍유권','4','0930','제1투표장','Y');
+
+
+insert into tbl_vote_202005 values('79010110005','조유권','5','0930','제1투표장','Y');
+
+insert into tbl_vote_202005 values('89010120006','최유권','1','0930','제1투표장','Y');
+
+insert into tbl_vote_202005 values('59010110007','지유권','1','0930','제1투표장','Y');
+
+insert into tbl_vote_202005 values('49010120008','장유권','3','0930','제1투표장','Y');
+
+insert into tbl_vote_202005 values('79010110009','정유권','3','0930','제1투표장','Y');
+
+insert into tbl_vote_202005 values('89010120010','강유권','4','0930','제1투표장','Y');
+
+insert into tbl_vote_202005 values('99010110011','신유권','5','0930','제1투표장','Y');
+
+insert into tbl_vote_202005 values('79010120012','오유권','1','1330','제1투표장','Y');
+
+insert into tbl_vote_202005 values('69010110013','현유권','4','1330','제2투표장','Y');
+
+insert into tbl_vote_202005 values('89010110014','왕유권','2','1330','제2투표장','Y');
+
+insert into tbl_vote_202005 values('99010110015','유유권','3','1330','제2투표장','Y');
+
+insert into tbl_vote_202005 values('79010110016','한유권','2','1330','제2투표장','Y');
+
+insert into tbl_vote_202005 values('89010110017','문유권','4','1330','제2투표장','Y');
+
+insert into tbl_vote_202005 values('99010110018','양유권','2','1330','제2투표장','Y');
+
+insert into tbl_vote_202005 values('99010110019','구유권','4','1330','제2투표장','Y');
+
+insert into tbl_vote_202005 values('79010110020','황유권','5','1330','제2투표장','Y');
+
+insert into tbl_vote_202005 values('69010110021','배유권','3','1330','제2투표장','Y');
+
+insert into tbl_vote_202005 values('79010110022','전유권','3','1330','제2투표장','Y');
+
+insert into tbl_vote_202005 values('99010110023','고유권','1','1330','제2투표장','Y');
+
+insert into tbl_vote_202005 values('59010110024','권유권','3','1330','제2투표장','Y');
+
+
+SELECT * FROM TBL_MEMBER_202005;
+
+
+INSERT INTO TBL_MEMBER_202005 VALUES('1','김후보','P1','1','6603011999991','수선화동');
+INSERT INTO TBL_MEMBER_202005 VALUES('2','이후보','P2','3','5503011999992','민들래동');
+INSERT INTO TBL_MEMBER_202005 VALUES('3','박후보','P3','2','7703011999993','나팔꽃동');
+INSERT INTO TBL_MEMBER_202005 VALUES('4','조후보','P4','2','8803011999994','진달래동');
+INSERT INTO TBL_MEMBER_202005 VALUES('5','최후보','P5','3','9903011999995','개나리동');
+
+
+
+INSERT INTO TBL_PARTY_202005 VALUES('P1','A정당','2010-01-01','위대표','02','1111','0001');
+INSERT INTO TBL_PARTY_202005 VALUES('P5','E정당','2010-05-01','임대표','02','1111','0005');
+
+SELECT * FROM TBL_PARTY_202005;
+
+SELECT * FROM TBL_MEMBER_202005;
+
+
+
+
+
+
+select * from tbl_vote_202005;
+
+ALTER TABLE tbl_vote_202005
+RENAME COLUMN V_CONFIRM TO 유권자확인;
+
+-- 홈쇼핑
+
+
+SELECT * FROM MEMBER_TBL_02;
+
+ALTER TABLE MEMBER_TBL_02
+RENAME COLUMN CITY TO 도시코드;
+
+INSERT INTO MEMBER_TBL_02 VALUES('100006','차공단','010-1111-7777','제주도 제주시 감나무골','20151211','C','60');
+
+SELECT * FROM MONEY_TBL_02;
+
+INSERT INTO MONEY_TBL_02 VALUES('100004','20160010','3000','1','3000','A007','20160106');
+
