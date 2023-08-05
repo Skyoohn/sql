@@ -217,15 +217,81 @@ SELECT * FROM TBL_PARTY_202005;
 
 SELECT * FROM TBL_MEMBER_202005;
 
-
-
-
-
-
 select * from tbl_vote_202005;
 
-ALTER TABLE tbl_vote_202005
-RENAME COLUMN V_CONFIRM TO 유권자확인;
+
+
+
+
+--후보조회 메뉴
+select d."후보번호",d."성명",a."명칭" as 소속정당,d."주민번호",d."지역구",a."전화번호1"||'- '||a."전화번호2"||' - '||a."전화번호3" as 대표전화
+from TBL_PARTY_202005 a, TBL_MEMBER_202005 d
+where a.정당코드=d.소속정당; 
+
+
+
+
+
+
+--과정
+select 성명, 주민번호 as 생년월일, 주민번호 as 나이, 주민번호 as 성별, 후보번호, 투표시간, 유권자확인
+from tbl_vote_202005;
+
+select 성명, 19||substr(주민번호,1,2) ||'년'|| substr(주민번호,3,2)||'월'||substr(주민번호,3,2)||'일생' as 생년월일
+from tbl_vote_202005;
+
+select sysdate, 성명, 19||substr(주민번호,1,2) ||'년'|| substr(주민번호,3,2)||'월'||substr(주민번호,3,2)||'일생' as 생년월일, 
+floor(months_between(sysdate,to_date(substr(주민번호,1,6)))/12) as 나이
+from tbl_vote_202005;
+
+
+
+--투표검수조회
+select 성명, 19||substr(주민번호,1,2) ||'년'|| substr(주민번호,3,2)||'월'||substr(주민번호,3,2)||'일생' as 생년월일, 
+floor(months_between(sysdate,to_date(substr(주민번호,1,6)))/12) as 나이,
+case when substr(주민번호,7,1) = '1' then '남'
+         when substr(주민번호,7,1) = '2' then '여'
+end as 성별, 
+후보번호, substr(투표시간,1,2)||':'||substr(투표시간,3,4) as 투표시간,
+case when substr(유권자확인,1,1) = 'N' then '미확인'
+         when substr(유권자확인,1,1) = 'Y' then '확인'
+end as 유권자확인
+from tbl_vote_202005;
+-- 49년생 장유권 에러남 이유불명
+
+
+
+
+-- 과정
+select count (distinct d.후보번호)
+from tbl_vote_202005 a, TBL_MEMBER_202005 d
+where a.후보번호=d.후보번호; 
+
+select distinct d."성명"
+from tbl_vote_202005 a, TBL_MEMBER_202005 d
+where a.후보번호=d.후보번호; 
+
+
+select d.성명, count(d."후보번호") as 총투표건수
+from tbl_vote_202005 a, TBL_MEMBER_202005 d
+where a.후보번호=d.후보번호
+group by d.성명
+order by 총투표건수 desc;
+
+
+
+--후보자등수
+select d.후보번호, d.성명, count(d."후보번호") as 총투표건수
+from tbl_vote_202005 a, TBL_MEMBER_202005 d
+where a.후보번호=d.후보번호
+group by d.성명, d.후보번호
+order by 총투표건수 desc;
+-- 예시가 틀렸음 이후보 4, 김후보 5가 맞음
+
+
+
+--ALTER TABLE tbl_vote_202005
+--RENAME COLUMN V_CONFIRM TO 유권자확인;
 
 -- 홈쇼핑
 
