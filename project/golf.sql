@@ -290,6 +290,7 @@ order by 총투표건수 desc;
 
 
 
+
 --ALTER TABLE tbl_vote_202005
 --RENAME COLUMN V_CONFIRM TO 유권자확인;
 
