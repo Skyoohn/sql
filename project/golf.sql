@@ -116,6 +116,7 @@ SELECT * FROM TBL_TEACHER_202201;
 
 SELECT * FROM TBL_MEMBER_202201;
 
+
 SELECT TEACHER_CODE AS 강사코드,CLASS_NAME AS 강의명,TEACHER_NAME AS 강사명,CLASS_PRICE AS 총매출
 FROM TBL_TEACHER_202201;
 
@@ -133,12 +134,22 @@ from TBL_TEACHER_202201 a,TBL_CLASS_202201 d
 where a.TEACHER_CODE=d.TEACHER_CODE; 
 
 
-select a.TEACHER_CODE AS 강사코드, a.CLASS_NAME AS 강의명, a.TEACHER_NAME AS 강사명, SUM(d.TUITION) AS 총매출
+
+
+select a.TEACHER_CODE AS 강사코드, a.CLASS_NAME AS 강의명, a.TEACHER_NAME AS 강사명, '\'||SUM(d.TUITION) AS 총매출
 from TBL_TEACHER_202201 a,TBL_CLASS_202201 d
 where a.TEACHER_CODE=d.TEACHER_CODE
 group by a.TEACHER_CODE, a.CLASS_NAME, a.TEACHER_NAME, d.TUITION
 order by a.TEACHER_CODE;
 
+
+
+--매출
+select a.TEACHER_CODE AS 강사코드, a.CLASS_NAME AS 강의명, a.TEACHER_NAME AS 강사명, to_char((SUM(d.TUITION)),'l999,999') AS 총매출
+from TBL_TEACHER_202201 a,TBL_CLASS_202201 d
+where a.TEACHER_CODE=d.TEACHER_CODE
+group by a.TEACHER_CODE, a.CLASS_NAME, a.TEACHER_NAME, d.TUITION
+order by a.TEACHER_CODE;
 
 
 -- 투표
@@ -213,6 +224,7 @@ INSERT INTO TBL_MEMBER_202005 VALUES('5','최후보','P5','3','9903011999995','개나
 INSERT INTO TBL_PARTY_202005 VALUES('P1','A정당','2010-01-01','위대표','02','1111','0001');
 INSERT INTO TBL_PARTY_202005 VALUES('P5','E정당','2010-05-01','임대표','02','1111','0005');
 
+
 SELECT * FROM TBL_PARTY_202005;
 
 SELECT * FROM TBL_MEMBER_202005;
@@ -220,16 +232,24 @@ SELECT * FROM TBL_MEMBER_202005;
 select * from tbl_vote_202005;
 
 
-
+ALTER TABLE TBL_MEMBER_202005
+RENAME COLUMN P_JUMIN TO M_JUMIN;
 
 
 --후보조회 메뉴
-select d."후보번호",d."성명",a."명칭" as 소속정당,d."주민번호",d."지역구",a."전화번호1"||'- '||a."전화번호2"||' - '||a."전화번호3" as 대표전화
+--select d."후보번호",d."성명",a."명칭" as 소속정당,d."주민번호",d."지역구",a."전화번호1"||'- '||a."전화번호2"||' - '||a."전화번호3" as 대표전화
+--from TBL_PARTY_202005 a, TBL_MEMBER_202005 d
+--where a.정당코드=d.소속정당; 
+
+select d."M_NO" AS 후보번호,d."M_NAME" AS 성명,a."P_NAME" as 소속정당, 
+case when substr(d.P_SCHOOL,1,1) = '1' then '고졸'
+         when substr(d.P_SCHOOL,1,1) = '2' then '학사'
+         when substr(d.P_SCHOOL,1,1) = '3' then '석사'
+end as 최종학력,
+substr(d."M_JUMIN",1,6)||'-'||substr(d."M_JUMIN",7,14) AS 주민번호,
+d."M_CITY" AS 지역구,a."P_TEL1"||'- '||a."P_TEL2"||' - '||a."P_TEL3" as 대표전화
 from TBL_PARTY_202005 a, TBL_MEMBER_202005 d
-where a.정당코드=d.소속정당; 
-
-
-
+where a.P_CODE=d.P_CODE;
 
 
 
@@ -247,19 +267,19 @@ from tbl_vote_202005;
 
 
 --투표검수조회
-select 성명, 19||substr(주민번호,1,2) ||'년'|| substr(주민번호,3,2)||'월'||substr(주민번호,3,2)||'일생' as 생년월일, 
-floor(months_between(sysdate,to_date(substr(주민번호,1,6)))/12) as 나이,
-case when substr(주민번호,7,1) = '1' then '남'
-         when substr(주민번호,7,1) = '2' then '여'
+select V_NAME AS 성명, 19||substr(V_JUMIN,1,2) ||'년'|| substr(V_JUMIN,3,2)||'월'||substr(V_JUMIN,3,2)||'일생' as 생년월일, 
+floor(months_between(sysdate,to_date(substr(V_JUMIN,1,6)))/12) as 나이,
+case when substr(V_JUMIN,7,1) = '1' then '남'
+         when substr(V_JUMIN,7,1) = '2' then '여'
 end as 성별, 
-후보번호, substr(투표시간,1,2)||':'||substr(투표시간,3,4) as 투표시간,
-case when substr(유권자확인,1,1) = 'N' then '미확인'
-         when substr(유권자확인,1,1) = 'Y' then '확인'
+M_NO AS 후보번호, substr(V_TIME,1,2)||':'||substr(V_TIME,3,4) as 투표시간,
+case when substr(V_CONFIRM,1,1) = 'N' then '미확인'
+         when substr(V_CONFIRM,1,1) = 'Y' then '확인'
 end as 유권자확인
 from tbl_vote_202005;
 -- 49년생 장유권 에러남 이유불명
 
-
+select * from tbl_vote_202005;
 
 
 -- 과정
@@ -281,13 +301,12 @@ order by 총투표건수 desc;
 
 
 --후보자등수
-select d.후보번호, d.성명, count(d."후보번호") as 총투표건수
+select d.M_NO AS 후보번호, d.M_NAME AS 성명, count(d."M_NO") as 총투표건수
 from tbl_vote_202005 a, TBL_MEMBER_202005 d
-where a.후보번호=d.후보번호
-group by d.성명, d.후보번호
+where a.M_NO=d.M_NO
+group by d.M_NAME, d.M_NO
 order by 총투표건수 desc;
 -- 예시가 틀렸음 이후보 4, 김후보 5가 맞음
-
 
 
 
@@ -300,7 +319,7 @@ order by 총투표건수 desc;
 SELECT * FROM MEMBER_TBL_02;
 
 ALTER TABLE MEMBER_TBL_02
-RENAME COLUMN CITY TO 도시코드;
+RENAME COLUMN 도시코드 TO city;
 
 INSERT INTO MEMBER_TBL_02 VALUES('100006','차공단','010-1111-7777','제주도 제주시 감나무골','20151211','C','60');
 
@@ -308,3 +327,47 @@ SELECT * FROM MONEY_TBL_02;
 
 INSERT INTO MONEY_TBL_02 VALUES('100004','20160010','3000','1','3000','A007','20160106');
 
+
+--회원목록조회/수정
+SELECT custno as 회원번호, custname as 회원성명,
+phone as 전화번호, address as 주소, 20||joindate as 가입일자,
+case when substr(grade,1,1) = 'A' then 'VIP'
+         when substr(grade,1,1) = 'B' then '일반'
+         when substr(grade,1,1) = 'C' then '직원'
+end as 고객등급, 
+CITY as 거주지역
+FROM  MEMBER_TBL_02;
+
+
+--회원매출조회
+
+select a.custno as 회원번호, a. custname as 회원성명,
+case when substr(grade,1,1) = 'A' then 'VIP'
+         when substr(grade,1,1) = 'B' then '일반'
+         when substr(grade,1,1) = 'C' then '직원'
+end as 고객등급, 
+d. price as 매출
+from MEMBER_TBL_02 a, MONEY_TBL_02 d
+where a.custno = d. custno
+order by 매출 desc;
+
+
+
+select a.custno as 회원번호, a. custname as 회원성명,
+case when substr(grade,1,1) = 'A' then 'VIP'
+         when substr(grade,1,1) = 'B' then '일반'
+         when substr(grade,1,1) = 'C' then '직원'
+end as 고객등급,
+count(d.price) as 매출
+from MEMBER_TBL_02 a, MONEY_TBL_02 d
+where a.custno = d. custno
+
+group by d.price, d. price
+
+order by 매출 desc;
+
+
+
+
+SELECT * FROM MEMBER_TBL_02;
+SELECT * FROM MONEY_TBL_02;
