@@ -349,8 +349,11 @@ case when substr(grade,1,1) = 'A' then 'VIP'
          when substr(grade,1,1) = 'B' then '일반'
          when substr(grade,1,1) = 'C' then '직원'
 end as 고객등급, 
-CITY as 거주지역
+city as 거주지역
 FROM  MEMBER_TBL_02;
+
+
+SELECT * FROM MEMBER_TBL_02;
 
 
 --회원매출조회
@@ -394,18 +397,46 @@ order by 매출 desc;
 
 
 
+
+
+-과정
 SELECT * FROM MEMBER_TBL_02;
 
 SELECT * FROM MONEY_TBL_02;
 
 
-INSERT INTO dbo.dept (custno, custname, phone, address, joindate, grade, city)
+INSERT INTO MEMBER_TBL_02 (custno, custname, phone, address, joindate, grade, city)
      SELECT custno + 1
           , custname
           , phone
           ,address
-          ,joindate(sysdate)
+          ,sysdate
           ,grade
           ,city
-       FROM dept
+       FROM MEMBER_TBL_02
       WHERE custno IN (60, 70, 80);
+      
+INSERT INTO MEMBER_TBL_02
+values (custno+1, ' ', ' ', ' ', sysdate, ' ', ' ');
+
+
+--회원등록 화면
+INSERT INTO MEMBER_TBL_02 (custno, custname, phone, address, joindate, grade, city)
+values ((SELECT MAX(custno) + 1 FROM MEMBER_TBL_02), '홍길동', '010-1111-1111', '서울 서초구 서초동', sysdate, 'A', '01');
+
+rollback;
+
+select * from MEMBER_TBL_02;
+
+INSERT INTO MEMBER_TBL_02 VALUES('100006','차공단','010-1111-7777','제주도 제주시 감나무골','20151211','C','60');
+
+
+
+--투표 이력 테이블
+
+select * from tbl_vote_202005;
+
+insert into tbl_vote_202005 
+values('59010110024','권유권','3','1330','제2투표장','Y');
+
+rollback;
