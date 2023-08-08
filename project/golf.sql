@@ -436,7 +436,7 @@ INSERT INTO MEMBER_TBL_02 VALUES('100006','차공단','010-1111-7777','제주도 제주�
 
 select * from tbl_vote_202005;
 
-insert into tbl_vote_202005 
-values('59010110024','권유권','3','1330','제2투표장','Y');
+insert into tbl_vote_202005 (v_jumin, v_name, m_no, v_time, v_area, v_confirm)
+values('01010110025','유유권','5','1330','제2투표장','Y');
 
 rollback;
