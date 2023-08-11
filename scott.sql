@@ -67,7 +67,6 @@ select * from emp where comm in (300,500,1400); -- in이 or, 갯수 상관x
 select * from emp where comm not in (300,500,1400);
 
 
-
 -- 7/10
 
 
