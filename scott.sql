@@ -31,11 +31,6 @@ select  *  from mvc_board;
 
 
 
-
-
-
-
-
 SELECT * FROM EMP;
 SELECT * FROM emp WHERE SAL = 5000;
 select * from emp where deptno = 20;
