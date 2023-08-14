@@ -907,7 +907,6 @@ select rownum rn, m.* from mvc_board m where rownum <=10;
 select rownum rn, m.* from mvc_board m where rownum >0 and rownum <= 20;
 
 
-
         SELECT * FROM (
               SELECT ROWNUM AS RNUM, A.* FROM (
                        SELECT
