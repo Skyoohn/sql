@@ -916,3 +916,5 @@ select rownum rn, m.* from mvc_board m where rownum >0 and rownum <= 20;
                          order by bGroup desc, bStep asc   
              ) A WHERE ROWNUM <= 20
          ) WHERE RNUM > 10;
+         ;
+         
