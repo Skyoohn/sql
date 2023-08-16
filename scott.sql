@@ -162,6 +162,7 @@ select hiredate, to_char(hiredate,'yyyy/mm/dd day') as 입사일 from emp;   -- 입�
 select to_char(sysdate, 'yyyy/mm/dd, hh24:mi:ss') from dual;
 
 
+
 desc emp; 
 
 select ename, sal, to_char(sal, 'l99,999') as 통화 from emp; -- 각 지역별 통화기호를 앞에 붙이고 천단위마다 콤마를 붙여서 출력
