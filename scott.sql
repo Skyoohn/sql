@@ -951,4 +951,5 @@ insert into AUTHORITIES (username,AUTHORITY) values('member','ROLE_MANAGER');
 insert into AUTHORITIES (username,AUTHORITY) values('admin','ROLE_MANAGER');
 insert into AUTHORITIES (username,AUTHORITY) values('admin','ROLE_ADMIN');
 
+
 commit;
