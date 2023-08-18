@@ -955,7 +955,6 @@ insert into AUTHORITIES (username,AUTHORITY) values('admin','ROLE_ADMIN');
 commit;
 
 
-
 select * from AUTHORITIES, users where users.username = AUTHORITIES.username;
 
 desc AUTHORITIES;
