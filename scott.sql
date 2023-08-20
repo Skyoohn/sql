@@ -922,7 +922,6 @@ select rownum rn, m.* from mvc_board m where rownum >0 and rownum <= 20;
 rollback;
 
 
-
 create table users(
 	username varchar2(50) not null primary key,
 	password varchar2(100) not null,
