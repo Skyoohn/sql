@@ -959,3 +959,133 @@ desc AUTHORITIES;
 desc users;
 
 select * from users;
+
+
+
+
+
+
+
+
+
+
+--게시판 제작중
+
+
+-- 게시판 db
+create table ms_board (
+bid number(6) primary key,      -- 게시물 식별자
+bname varchar2(20) not null,    -- 작성자 이름
+btitle varchar2(100) not null,  -- 게시물 제목
+bcontent varchar2(500),         -- 게시물 내용
+bdate date default sysdate,     -- 게시물 작성 일자
+bhit number(4) default 0,       -- 조회수
+bgroup number(4),
+bstep number(4),
+bindent number(4)
+);
+
+select * from ms_board;
+
+INSERT INTO ms_board VALUES('1','1','P1','1','11/12/30','1','1','1','1');
+
+commit;
+
+rollback;
+
+create table ms_notice_board (
+    bid number(6) primary key,      --게시물 식별자
+    bname varchar2(20) not null,    --작성자 이름
+    btitle varchar2(100) not null,  --게시물 제목
+    bcontent varchar2(500),         --게시물 내용
+    bdate date default sysdate,     --게시물 작성 일자
+    bhit number(4) default 0,       --조회수
+    bgroup number(4),
+    bstep number(4),
+    bindent number(4)
+);
+
+select * from ms_notice_board;
+
+
+CREATE SEQUENCE ms_board_seq
+START WITH 1
+INCREMENT BY 1;
+
+CREATE SEQUENCE ms_notice_board_seq
+START WITH 1
+INCREMENT BY 1;
+
+commit;
+
+create table ms_qna_board (
+  qid number(6) primary key,        -- 게시물 식별자
+  qname varchar2(20) not null,      -- 작성자 이름
+  qtitle varchar2(100) not null,    -- 게시물 제목
+  qcontent varchar2(500),           -- 게시물 내용
+  qdate date default sysdate,       -- 게시물 작성 일자
+  qgroup number(4),
+  qstep number(4),
+  qindent number(4)
+);
+
+drop table ms_review_board;
+
+select * from ms_qna_board;
+
+create table ms_review_board (
+  rid number(6) primary key,        -- 게시물 식별자
+  rname varchar2(20) not null,      -- 작성자 이름
+  rtitle varchar2(100) not null,    -- 게시물 제목
+  rcontent varchar2(500),           -- 게시물 내용
+  rdate date default sysdate,       -- 게시물 작성 일자
+  rgroup number(4),
+  rstep number(4),
+  rindent number(4)
+);
+
+
+select * from ms_review_board;
+select * from ms_qna_board;
+
+CREATE SEQUENCE ms_qna_board_seq
+START WITH 1
+INCREMENT BY 1;
+
+CREATE SEQUENCE ms_review_board_seq
+START WITH 1
+INCREMENT BY 1;
+
+commit;
+
+
+drop table ms_notice_board;
+
+
+create table ms_notice_board (
+    nid number(6) primary key,      -- 게시물 식별자
+    nname varchar2(20) not null,    -- 작성자 이름
+    ntitle varchar2(100) not null,  -- 게시물 제목
+    ncontent varchar2(500),         -- 게시물 내용
+    ndate date default sysdate,     -- 게시물 작성 일자
+    ngroup number(4),
+    nstep number(4),
+    nindent number(4)
+);
+
+
+select * from ms_notice_board;
+
+
+
+CREATE SEQUENCE ms_notice_board_seq
+START WITH 1
+INCREMENT BY 1;
+
+
+SELECT
+    OBJECT_NAME
+    ,OBJECT_TYPE
+FROM
+    USER_OBJECTS
+WHERE OBJECT_NAME LIKE '%테이블명%';
