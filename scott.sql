@@ -1062,7 +1062,7 @@ commit;
 drop table ms_notice_board;
 
 
-create table ms_notice_board (
+create table ms_notice_board1 (
     nid number(6) primary key,      -- 게시물 식별자
     nname varchar2(20) not null,    -- 작성자 이름
     ntitle varchar2(100) not null,  -- 게시물 제목
@@ -1074,9 +1074,10 @@ create table ms_notice_board (
 );
 
 
-select * from ms_notice_board;
+select * from ms_notice_board1;
 
 
+INSERT INTO ms_notice_board1 VALUES('1','1','P1','1','11/12/30','1','1','1');
 
 CREATE SEQUENCE ms_notice_board_seq
 START WITH 1
