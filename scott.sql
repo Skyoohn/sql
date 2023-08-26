@@ -1076,7 +1076,6 @@ create table ms_notice_board1 (
 
 select * from ms_notice_board1;
 
-
 INSERT INTO ms_notice_board1 VALUES('1','1','P1','1','11/12/30','1','1','1');
 
 CREATE SEQUENCE ms_notice_board_seq
