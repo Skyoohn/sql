@@ -965,10 +965,6 @@ select * from users;
 
 
 
-
-
-
-
 --게시판 제작중
 
 
@@ -1058,9 +1054,7 @@ INCREMENT BY 1;
 
 commit;
 
-
 drop table ms_notice_board;
-
 
 create table ms_notice_board1 (
     nid number(6) primary key,      -- 게시물 식별자
