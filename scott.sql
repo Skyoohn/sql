@@ -1056,7 +1056,7 @@ commit;
 
 drop table ms_notice_board;
 
-create table ms_notice_board1 (
+create table ms_notice_board (
     nid number(6) primary key,      -- 게시물 식별자
     nname varchar2(20) not null,    -- 작성자 이름
     ntitle varchar2(100) not null,  -- 게시물 제목
@@ -1064,7 +1064,8 @@ create table ms_notice_board1 (
     ndate date default sysdate,     -- 게시물 작성 일자
     ngroup number(4),
     nstep number(4),
-    nindent number(4)
+    nindent number(4),
+    selecter number(1) not null
 );
 
 select * from ms_notice_board1;
