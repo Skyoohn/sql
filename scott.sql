@@ -1075,3 +1075,39 @@ INSERT INTO ms_notice_board1 VALUES('1','1','P1','1','11/12/30','1','1','1');
 CREATE SEQUENCE ms_notice_board_seq
 START WITH 1
 INCREMENT BY 1;
+
+
+-- 게시판 db
+create table ms_board (
+bid number(6) primary key,      -- 게시물 식별자
+bname varchar2(20) not null,    -- 작성자 이름
+btitle varchar2(100) not null,  -- 게시물 제목
+bcontent varchar2(500),         -- 게시물 내용
+bdate date default sysdate,     -- 게시물 작성 일자
+bhit number(4) default 0,       -- 조회수
+bgroup number(4),
+bstep number(4),
+bindent number(4),
+selecter number(1) not null --게시글구분 1:공지 2:qna 3:리뷰
+);
+
+
+drop table ms_board;
+select * from ms_board;
+
+INSERT INTO ms_board VALUES('1','1','P1','1','11/12/30','1','1','1','1','1');
+
+commit;
+
+rollback;
+
+
+drop table ms_notice_board;
+
+select * from ms_notice_board;
+
+commit;
+
+CREATE SEQUENCE ms_board_seq
+START WITH 1
+INCREMENT BY 1;
