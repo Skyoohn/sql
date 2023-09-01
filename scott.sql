@@ -1111,3 +1111,5 @@ commit;
 CREATE SEQUENCE ms_board_seq
 START WITH 1
 INCREMENT BY 1;
+
+select * from ms_board where selecter = 1;
