@@ -1113,3 +1113,34 @@ START WITH 1
 INCREMENT BY 1;
 
 select * from ms_board where selecter = 1;
+
+
+create table ms_users(
+   username varchar2(50) not null primary key,
+   password varchar2(100) not null,
+   enabled char(1) DEFAULT '1',
+    cname VARCHAR2(50) NOT NULL,        -- 회원 이름
+    cbirthdate DATE,           -- 회원 생년월일
+    caddress1 VARCHAR2(100),             -- 회원 주소
+    caddress2 VARCHAR2(100),
+    caddress3 VARCHAR2(100),
+    caddress4 VARCHAR2(100),
+    caddress5 VARCHAR2(100),
+    cgrade NUMBER(1)                   -- 회원 등급
+);
+create table ms_authorities (
+   username varchar2(50) not null,
+   authority varchar2(50) not null,
+   constraint fk_ms_authorities_ms_users foreign key(username) references ms_users(username)
+);
+create unique index ix_ms_auth_ms_username on ms_authorities (username,authority);
+select * from ms_users;
+select * from ms_authorities;
+drop table ms_users;
+drop table ms_authorities;
+commit;
+delete from ms_users where username = 'admin';
+delete from ms_authorities where username = 'admin';
+select * from ms_customer;
+insert into ms_AUTHORITIES (username,AUTHORITY) values('admin','ROLE_ADMIN');
+insert into ms_AUTHORITIES (username,AUTHORITY) values('admin','ROLE_MANAGER');
