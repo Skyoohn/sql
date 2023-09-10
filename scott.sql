@@ -1147,3 +1147,4 @@ insert into ms_AUTHORITIES (username,AUTHORITY) values('admin','ROLE_MANAGER');
 
 
 select * from ms_board where selecter = 1 order by bGroup desc, bStep asc;
+
