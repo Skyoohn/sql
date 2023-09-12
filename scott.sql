@@ -626,7 +626,7 @@ EMP_SEQ.NEXTVAL,'홍길동',SYSDATE);
 select * from emp01;
 
 select EMP_SEQ.currval from dual;
-select EMP_SEQ.nextval from dual;             
+select EMP_SEQ.nextval from dual;
 
 alter sequence EMP_SEQ increment by 2;         -- 2씩 증가 하도록 변경
 
@@ -1156,3 +1156,9 @@ START WITH 1
 INCREMENT BY 1;
 
 commit;
+
+
+BEGIN
+  DELETE FROM ms_authorities WHERE username = 'a@a.a.a';
+  DELETE FROM ms_users WHERE username = 'a@a.a.a';
+END;
