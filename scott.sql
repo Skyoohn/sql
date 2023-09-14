@@ -1157,7 +1157,6 @@ INCREMENT BY 1;
 
 commit;
 
-
 BEGIN
   DELETE FROM ms_authorities WHERE username = 'a@a.a.a';
   DELETE FROM ms_users WHERE username = 'a@a.a.a';
