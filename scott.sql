@@ -1159,3 +1159,5 @@ BEGIN
   DELETE FROM ms_authorities WHERE username = 'a@a.a.a';
   DELETE FROM ms_users WHERE username = 'a@a.a.a';
 END;
+
+SELECT count(*) FROM ms_board WHERE selecter = 1;
