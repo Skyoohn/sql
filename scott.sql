@@ -1162,3 +1162,4 @@ END;
 SELECT count(*) FROM ms_board WHERE selecter = 1;
 
 rollback;
+
