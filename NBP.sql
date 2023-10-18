@@ -9,7 +9,6 @@ CREATE SEQUENCE nbp_board_seq
 START WITH 1
 INCREMENT BY 1;
 
-
 create table nbp_user_board (
 uid number(6) primary key,      -- 게시물 식별자
 uname varchar2(20) not null,    -- 작성자 이름
@@ -37,3 +36,5 @@ create table nbp_authorities (
    authority varchar2(50) not null,
    constraint fk_nbp_authorities_nbp_users foreign key(username) references nbp_users(username)
 );
+
+create unique index ix_nbp_auth_nbp_username on nbp_authorities (username,authority);
