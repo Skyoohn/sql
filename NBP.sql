@@ -23,3 +23,17 @@ uselector number(1) not null --1:공지 2:일반 게시판
 CREATE SEQUENCE nbp_user_board_seq
 START WITH 1
 INCREMENT BY 1;
+
+create table nbp_users(
+   username varchar2(50) not null primary key,
+   password varchar2(100) not null,
+   enabled char(1) DEFAULT '1',
+    cname VARCHAR2(50) NOT NULL,        -- 회원 이름
+    cgrade NUMBER(1)                   -- 회원 등급
+);
+
+create table nbp_authorities (
+   username varchar2(50) not null,
+   authority varchar2(50) not null,
+   constraint fk_nbp_authorities_nbp_users foreign key(username) references nbp_users(username)
+);
