@@ -1,8 +1,9 @@
 select * from nbp_board;
 
 create table nbp_board (
-ntitle varchar2(100) not null,  -- 게시물 제목
-ncontent varchar2(500)  -- 게시물 내용
+nkanji varchar2(100) not null,  -- 한자 title
+nruby varchar2(500),  -- 요미가나
+nsetsumei varchar2(500)  -- 설명
 );
 
 CREATE SEQUENCE nbp_board_seq
