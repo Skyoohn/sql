@@ -39,3 +39,7 @@ create table nbp_authorities (
 );
 
 create unique index ix_nbp_auth_nbp_username on nbp_authorities (username,authority);
+
+
+select * from users;
+select * from authorities;
