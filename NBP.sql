@@ -6,6 +6,8 @@ nruby varchar2(500),  -- ¿ä¹Ì°¡³ª
 nsetsumei varchar2(500)  -- ¼³¸í
 );
 
+INSERT INTO nbp_board VALUES('«Õ«ÃáÈ','ªÕªÃª½','«Õ«ÃáÈªÏ¡¢ê«í­Ûã?9ªÎêªáÈªÇª¢ªë¡£êªáÈÑÀ?ªÏF¡£ê«í­ÕáªÏ18.9984¡£«Ï«í«²«óªÎªÒªÈªÄ¡£ ªŞª¿¡¢ÔÒêªáÈªÎ??ªÇª¢ªë«Õ«ÃáÈİÂí­ªâ¡¢ìéÚõîÜªË«Õ«ÃáÈªÈû¼ªĞªìªë¡£');
+
 CREATE SEQUENCE nbp_board_seq
 START WITH 1
 INCREMENT BY 1;
@@ -40,6 +42,7 @@ create table nbp_authorities (
 
 create unique index ix_nbp_auth_nbp_username on nbp_authorities (username,authority);
 
-
 select * from users;
 select * from authorities;
+
+commit;
